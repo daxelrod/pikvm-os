@@ -10,6 +10,10 @@ fi
 
 rw
 
+# The HOSTNAME env var is set at the system level
+# but we only care about whether it's set in pikvm.txt
+unset HOSTNAME
+
 source /boot/pikvm.txt
 
 if [ -n "$WIFI_ESSID" ]; then
@@ -27,6 +31,10 @@ Key='$WIFI_PASSWD'
 end_wifi_config
 
     systemctl enable "netctl-auto@${WIFI_IFACE}.service"
+fi
+
+if [ -n "$HOSTNAME"; then
+    hostnamectl set-hostname "$HOSTNAME"
 fi
 
 rm /boot/pikvm.txt
